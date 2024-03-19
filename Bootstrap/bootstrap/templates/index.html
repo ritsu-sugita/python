@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>アプリ</title> <!--ここはタブのタイトル-->
+    <!--以下でBootstrapのcssを読み込む（Bootstrap5.3）-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+</head>
+
+<body>
+    <h1>お試し書店</h1>
+    <h2>今月の新刊一覧</h2>
+    {% if books == [] %}
+    <p>今月の新刊情報はまだありません</p>
+    {% else %}
+    <table border="1">
+        <tr>
+            <th>入荷日</th>
+            <th>タイトル</th>
+            <th>金額</th>
+            <th>削除</th>
+        </tr>
+        {% for book in books %}
+        <tr>
+            <td>{{ book.arrival_day }}</td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.price }}円</td>
+            <td><button onclick="removeBook('{{book.title}}')">削除</button></td> <!-- 「削除」ボタンの実装-->
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    <a href="{{url_for('form') }}">編集</a> <!--「編集」がリンクになる-->
+
+    <!--以下javascriptでの処理-->
+    <script>
+        function removeBook(title) {
+            //javascriptでAjaxリクエストを送信
+            var xhr = new XMLHttpRequest();
+            xhr.open("DELETE", "/delete", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            //削除対象の書籍情報を送信
+            var data = "title=" + encodeURIComponent(title);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    //削除が成功した場合の処理
+                    location.reload();//ページを再読み込みして新しいデータを表示
+                }
+            };
+            xhr.send(data);
+        }
+    </script>
+</body>
+
+</html>

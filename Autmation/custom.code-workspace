@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../custom"
+		},
+		{
+			"path": "../custom2"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../hoteltest"
+		},
+		{
+			"path": "../Typescript"
+		}
+	],
+	"settings": {}
+}
